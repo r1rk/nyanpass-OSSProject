@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<link rel="stylesheet" href="assets/css/style.css" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Nunito:700" rel="stylesheet" type="text/css">
+<script src="assets/js/jquery.js"></script>
+<script src="assets/js/ion.js"></script>
+<meta name="description" content="にゃんぱすーをシェアできる全く新しい画期的なWEBサービス(セルフホスト版)">
+<title>にゃんぱすーボタン(セルフホスト版)</title>
+</head>
+<body>
+<div id="wrap">
+	<div id="contents">
+		<div id="head"><h1>にゃんぱすーをシェアできる全く新しい画期的なWEBサービスですのん</h1></div>
+		<div id="count">0</div>
+		<div id="nyanpass">にゃんぱすー</div>
+		<div id="mode">
+			<div class="mode_btn active">
+				りあるたいむ
+				<span class="active">ON</span>
+				<span>OFF</span>
+			</div>
+		</div>
+		<div id="ver">
+			<span>にゃんぱすーボタン セルフホスト版</span>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	var mode = 1; // 1: りあるたいむON, 2: OFF
+
+	firstNyanpass();
+
+	function firstNyanpass() {
+		var cnt = parseInt(localStorage.getItem('nyanpass_count'), 10) || 0;
+		reflectNyanpass(cnt);
+	}
+
+	function addNyanpass() {
+		var cnt = parseInt(localStorage.getItem('nyanpass_count'), 10) || 0;
+		cnt++;
+		localStorage.setItem('nyanpass_count', cnt);
+		reflectNyanpass(cnt);
+	}
+
+	function reflectNyanpass(cnt) {
+		if (localNyanpass() > cnt) {
+			cnt = localNyanpass();
+		}
+		$('#count').html(cnt);
+	}
+
+	function localNyanpass() {
+		return parseInt($('#count').html(), 10) || 0;
+	}
+
+	ion.sound({
+		sounds: [{ name: 'nyanpass' }],
+		path: 'assets/sound/',
+		preload: true,
+		multiplay: true
+	});
+
+	$('#nyanpass').on('click', function(){
+		ion.sound.play('nyanpass');
+		addNyanpass();
+	});
+
+	$('#mode .mode_btn').on('click', function(){
+		mode++;
+		if (mode > 2) mode = 1;
+		$('#mode .mode_btn, #mode .mode_btn span').toggleClass('active');
+	});
+});
+</script>
+</body>
+</html>
