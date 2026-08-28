@@ -52,7 +52,7 @@ a:focus { outline: none; }
 .cf:after { clear: both; }
 
 body {
-	background-image: url('../img/back.jpg');
+	background-image: url('../img/back.webp');
 	background-position: center bottom;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
