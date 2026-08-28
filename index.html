@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-<link rel="stylesheet" href="assets/css/style.css" type="text/css">
+<link rel="stylesheet" href="assets/css/style.css?v=1.0.2" type="text/css">
 <link href="https://fonts.googleapis.com/css?family=Nunito:700" rel="stylesheet" type="text/css">
 <script src="assets/js/jquery.js"></script>
 <script src="assets/js/ion.js"></script>
@@ -24,17 +24,19 @@
 			</div>
 		</div>
 		<ul id="share">
-			<li class="tw"><a href="#" id="tweet_btn">ついーとするのん</a></li>
-			<li class="misskey"><a href="#" id="misskey_btn">しぇあするのん</a></li>
+			<li class="tw"><a href="#" id="tweet_btn">ついーとするのん <span class="share_count">× <span id="tweet_count">0</span></span></a></li>
+			<li class="misskey"><a href="#" id="misskey_btn">しぇあするのん <span class="share_count">× <span id="misskey_count">0</span></span></a></li>
 		</ul>
 		<div id="ver">
-			<span>にゃんぱすーボタン デモ版 ver1.0.1<a href="https://github.com/r1rk/nyanpass-OSSProject/blob/main/README.md" target="_blank" rel="noopener" class="about_link">[ABOUT]</a></span>
+			<span>にゃんぱすーボタン デモ版 ver1.0.2<a href="https://github.com/r1rk/nyanpass-OSSProject/blob/main/README.md" target="_blank" rel="noopener" class="about_link">[ABOUT]</a></span>
 		</div>
 	</div>
 </div>
 <script>
 $(function(){
 	var mode = 1; // 1: りあるたいむON, 2: OFF
+
+	// --- カウンターボタン本体(既存処理、変更なし) ---
 
 	firstNyanpass();
 
@@ -80,13 +82,37 @@ $(function(){
 	});
 
 	// --- SNSシェア機能(静的デモ版。サーバー処理は一切なし) ---
+	// シェア数は「このブラウザで何回シェアボタンを押したか」をlocalStorageに
+	// 記録しただけの仮の数値です。本家のような「全ユーザー合算のシェア数」を
+	// 出すには外部APIかバックエンドが必要になるため、それはv3(Go版)で検討します。
 
-	var SHARE_TEXT = 'にゃんぱすーをシェアできる全く新しい画期的なWEBサービス「にゃんぱすーボタン ver.1.0.1」 https://nyan-pass.f5.si #なのん';
+	var SHARE_TEXT = 'にゃんぱすーをシェアできる全く新しい画期的なWEBサービス「にゃんぱすーボタン ver.1.0.2」 https://nyan-pass.f5.si #なのん';
+
+	var TWEET_COUNT_KEY = 'nyanpass_tweet_share_count';
+	var MISSKEY_COUNT_KEY = 'nyanpass_misskey_share_count';
+
+	initShareCounts();
+
+	function initShareCounts() {
+		$('#tweet_count').text(getShareCount(TWEET_COUNT_KEY));
+		$('#misskey_count').text(getShareCount(MISSKEY_COUNT_KEY));
+	}
+
+	function getShareCount(key) {
+		return parseInt(localStorage.getItem(key), 10) || 0;
+	}
+
+	function incrementShareCount(key) {
+		var cnt = getShareCount(key) + 1;
+		localStorage.setItem(key, cnt);
+		return cnt;
+	}
 
 	$('#tweet_btn').on('click', function(e){
 		e.preventDefault();
 		var url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(SHARE_TEXT);
 		window.open(url, '_blank', 'noopener');
+		$('#tweet_count').text(incrementShareCount(TWEET_COUNT_KEY));
 	});
 
 	$('#misskey_btn').on('click', function(e){
@@ -97,6 +123,7 @@ $(function(){
 		if (!instance) return;
 		var url = 'https://' + instance + '/share?text=' + encodeURIComponent(SHARE_TEXT);
 		window.open(url, '_blank', 'noopener');
+		$('#misskey_count').text(incrementShareCount(MISSKEY_COUNT_KEY));
 	});
 });
 </script>
