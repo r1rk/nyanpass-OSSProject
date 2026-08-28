@@ -7,14 +7,13 @@
 <link href="https://fonts.googleapis.com/css?family=Nunito:700" rel="stylesheet" type="text/css">
 <script src="assets/js/jquery.js"></script>
 <script src="assets/js/ion.js"></script>
-<meta name="description" content="にゃんぱすーをシェアできる全く新しい画期的なWEBサービス(デモ版)">
+<meta name="description" content="にゃんぱすーをシェアできる全く新しい画期的なWEBサービス(セルフホスト版)">
 <title>にゃんぱすーボタン(デモ版)</title>
 </head>
 <body>
 <div id="wrap">
 	<div id="contents">
-		<div id="head"><h1>にゃんぱすーをシェアできる全く新しい画期的なWEBサービスですのん。<p>このページはデモ版として作成されているのん。</p>
-		</h1></div>
+		<div id="head"><h1>にゃんぱすーをシェアできる全く新しい画期的なWEBサービスですのん</h1></div>
 		<div id="count">0</div>
 		<div id="nyanpass">にゃんぱすー</div>
 		<div id="mode">
@@ -24,8 +23,12 @@
 				<span>OFF</span>
 			</div>
 		</div>
+		<ul id="share">
+			<li class="tw"><a href="#" id="tweet_btn">ついーとするのん</a></li>
+			<li class="misskey"><a href="#" id="misskey_btn">しぇあするのん</a></li>
+		</ul>
 		<div id="ver">
-			<span>にゃんぱすーボタン デモ版 ver1.0.0 <a href="https://github.com/r1rk/nyanpass-OSSProject/blob/main/README.md">[ABOUT]</a></span>
+			<span>にゃんぱすーボタン デモ版 ver1.0.1 <a href="https://github.com/r1rk/nyanpass-OSSProject/blob/main/README.md" target="_blank" rel="noopener" class="about_link">[ABOUT]</a></span>
 		</div>
 	</div>
 </div>
@@ -74,6 +77,26 @@ $(function(){
 		mode++;
 		if (mode > 2) mode = 1;
 		$('#mode .mode_btn, #mode .mode_btn span').toggleClass('active');
+	});
+
+	// --- SNSシェア機能(静的デモ版。サーバー処理は一切なし) ---
+
+	var SHARE_TEXT = 'にゃんぱすーをシェアできる全く新しい画期的なWEBサービス「にゃんぱすーボタン ver.1.0.0」 nyan-pass.f5.si #なのん';
+
+	$('#tweet_btn').on('click', function(e){
+		e.preventDefault();
+		var url = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(SHARE_TEXT);
+		window.open(url, '_blank', 'noopener');
+	});
+
+	$('#misskey_btn').on('click', function(e){
+		e.preventDefault();
+		var instance = window.prompt('投稿先のMisskeyインスタンスのドメインを入力してください(例: misskey.io)', 'misskey.io');
+		if (!instance) return;
+		instance = instance.trim().replace(/^https?:\/\//i, '').replace(/\/.*$/, '');
+		if (!instance) return;
+		var url = 'https://' + instance + '/share?text=' + encodeURIComponent(SHARE_TEXT);
+		window.open(url, '_blank', 'noopener');
 	});
 });
 </script>
