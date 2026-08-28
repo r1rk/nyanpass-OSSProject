@@ -119,6 +119,11 @@ body {
 #share .fb a { background: #3a5795; }
 #share .misskey a { background: #86b300; }
 #share li:hover { opacity: 0.9; }
+#share .share_count {
+	font-size: 0.85em;
+	opacity: 0.85;
+	margin-left: 2px;
+}
 #mode {
 	margin-top: 25px;
 }
