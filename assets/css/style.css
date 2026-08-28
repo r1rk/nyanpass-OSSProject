@@ -117,6 +117,7 @@ body {
 }
 #share .tw a { background: #55acee; }
 #share .fb a { background: #3a5795; }
+#share .misskey a { background: #86b300; }
 #share li:hover { opacity: 0.9; }
 #mode {
 	margin-top: 25px;
